@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true" default-autowire="byName">
+
+    <import resource="applicationContext-persistence-mongo.xml"/>
+    <import resource="applicationContext-service-integrationtest.xml"/>
+
+    <bean id="appProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:coolfsms-persistence-integrationtest.properties</value>
+                <value>file:${user.home}/coolfsms-persistence-integrationtest.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+</beans>

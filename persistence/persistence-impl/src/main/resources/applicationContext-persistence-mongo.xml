@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/data/mongo
+           http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd"
+       default-lazy-init="true" default-autowire="byName">
+
+    <context:annotation-config/>
+    <mongo:repositories base-package="com.sfl.coolmonkey.coolfs.persistence.repositories.*"/>
+    <context:component-scan base-package="com.sfl.coolmonkey.coolfs.persistence.repositories.*"/>
+
+    <mongo:mongo id="mongo"
+                 host="#{appProperties['database.mongo.host']}"
+                 port="#{appProperties['database.mongo.port']}">
+        <mongo:options connections-per-host="#{appProperties['database.mongo.connectionsperhost']}"
+                       threads-allowed-to-block-for-connection-multiplier="#{appProperties['database.mongo.threadallowedtoblockforconnectionmultiplier']}"
+                       connect-timeout="#{appProperties['database.mongo.connecttimeout']}"
+                       max-wait-time="#{appProperties['database.mongo.maxwaittime']}"
+                       auto-connect-retry="#{appProperties['database.mongo.autoconnectretry']}"
+                       socket-keep-alive="#{appProperties['database.mongo.socket.keepalive']}"
+                       socket-timeout="#{appProperties['database.mongo.socket.timeout']}"
+                       slave-ok="#{appProperties['database.mongo.slaveok']}"
+                       write-number="#{appProperties['database.mongo.write.number']}"
+                       write-timeout="#{appProperties['database.mongo.write.timeout']}"
+                       write-fsync="#{appProperties['database.mongo.write.fsync']}"/>
+    </mongo:mongo>
+
+    <mongo:db-factory id="mongoDbFactory"
+                      dbname="#{appProperties['database.mongo.dbname']}"
+                      mongo-ref="mongo"
+                      username="#{appProperties['database.mongo.username']}"
+                      password="#{appProperties['database.mongo.password']}"/>
+
+    <bean id="mongoMappingContext" class="org.springframework.data.mongodb.core.mapping.MongoMappingContext"/>
+
+    <bean id="mappingMongoConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
+        <constructor-arg name="dbRefResolver">
+            <bean class="org.springframework.data.mongodb.core.convert.DefaultDbRefResolver">
+                <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg name="mappingContext" ref="mongoMappingContext"/>
+    </bean>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="mongoConverter" ref="mappingMongoConverter"/>
+    </bean>
+
+    <bean id="mongoGridFsVenueFilesTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg name="dbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="converter" ref="mappingMongoConverter"/>
+        <constructor-arg name="bucket" value="${database.mongo.gridfs.venue.bucket}"/>
+    </bean>
+
+    <bean id="indexResolver" class="org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver">
+        <constructor-arg name="mappingContext" ref="mongoMappingContext"/>
+    </bean>
+
+    <bean id="gridFsTemplate" class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg ref="mongoDbFactory"/>
+        <constructor-arg ref="mappingMongoConverter"/>
+    </bean>
+
+</beans>

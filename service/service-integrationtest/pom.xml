@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>service</artifactId>
+        <groupId>com.sfl.coolmonkey.coolfs.service</groupId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>service-integrationtest</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sfl.coolmonkey.coolfs.service</groupId>
+            <artifactId>service-impl</artifactId>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <configuration>
+                            <!-- The destination file for the code coverage report has to be set to the same value
+                                 in the parent pom and in each module pom. Then JaCoCo will add up information in
+                                 the same report, so that, it will give the cross-module code coverage. -->
+                            <destFile>${project.basedir}/../../target/jacoco-it.exec</destFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

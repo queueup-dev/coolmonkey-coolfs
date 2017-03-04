@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>api</artifactId>
+        <groupId>com.sfl.coolmonkey.coolfs.api</groupId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>api-rest</artifactId>
+    <packaging>war</packaging>
+
+    <properties>
+        <servlet.api.version>3.1.0</servlet.api.version>
+        <commons.codec.version>1.4</commons.codec.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sfl.coolmonkey.coolfs.api</groupId>
+            <artifactId>api-facade</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.ext</groupId>
+            <artifactId>jersey-spring3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.sfl.coolmonkey.coolfs.api</groupId>
+                <artifactId>api-facade</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet.api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.containers</groupId>
+                <artifactId>jersey-container-servlet-core</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.ext</groupId>
+                <artifactId>jersey-spring3</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-multipart</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons.codec.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <configuration>
+                            <warName>ROOT</warName>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <configuration>
+                            <registryUrl>${docker.registry.url}</registryUrl>
+                            <serverId>${docker.registry.url}</serverId>
+                            <pushImage>true</pushImage>
+                            <baseImage>tomcat:8.0-jre8</baseImage>
+                            <imageName>${docker.registry.url}/coolfsms</imageName>
+                            <maintainer>CoolMonkey Team</maintainer>
+                            <runs>
+                                <run>rm -rf /usr/local/tomcat/webapps/ROOT</run>
+                                <run>rm -rf /usr/local/tomcat/webapps/docs</run>
+                                <run>rm -rf /usr/local/tomcat/webapps/examples</run>
+                                <run>rm -rf /usr/local/tomcat/webapps/host-manager</run>
+                                <run>rm -rf /usr/local/tomcat/webapps/manager</run>
+                            </runs>
+                            <imageTags>
+                                <imageTag>latest</imageTag>
+                                <imageTag>${bamboo.deploy.release}</imageTag>
+                            </imageTags>
+                            <resources>
+                                <resource>
+                                    <targetPath>/usr/local/tomcat/webapps</targetPath>
+                                    <directory>${project.build.directory}/</directory>
+                                    <include>ROOT.war</include>
+                                </resource>
+                                <resource>
+                                    <targetPath>/root/coolmonkey/</targetPath>
+                                    <directory>/opt/coolmonkey-docker/mount/app/coolfsms/${project.environment}/
+                                    </directory>
+                                    <include>*</include>
+                                </resource>
+                                <resource>
+                                    <targetPath>/root/coolmonkey/</targetPath>
+                                    <directory>/opt/coolmonkey-docker/mount/app/common/${project.environment}/
+                                    </directory>
+                                    <include>*</include>
+                                </resource>
+                                <resource>
+                                    <targetPath>/root/coolmonkey/</targetPath>
+                                    <directory>/opt/coolmonkey-docker/tools/newrelic/</directory>
+                                    <include>newrelic.jar</include>
+                                </resource>
+                            </resources>
+                            <exposes>8080</exposes>
+                            <entryPoint>["catalina.sh", "run"]</entryPoint>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.spotify</groupId>
+                            <artifactId>docker-maven-plugin</artifactId>
+                            <version>${docker.maven.plugin.version}</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-war-plugin</artifactId>
+                            <version>${maven.war.plugin.version}</version>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
