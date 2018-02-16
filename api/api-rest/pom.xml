@@ -111,7 +111,7 @@
                             <serverId>${docker.registry.url}</serverId>
                             <pushImage>true</pushImage>
                             <baseImage>tomcat:8.0-jre8</baseImage>
-                            <imageName>${docker.registry.url}/coolfsms</imageName>
+                            <imageName>${docker.registry.url}/qup-fs-${project.environment}</imageName>
                             <maintainer>CoolMonkey Team</maintainer>
                             <runs>
                                 <run>rm -rf /usr/local/tomcat/webapps/ROOT</run>
@@ -122,30 +122,13 @@
                             </runs>
                             <imageTags>
                                 <imageTag>latest</imageTag>
-                                <imageTag>${bamboo.deploy.release}</imageTag>
+                                <imageTag>${jenkins.deploy.release}</imageTag>
                             </imageTags>
                             <resources>
                                 <resource>
                                     <targetPath>/usr/local/tomcat/webapps</targetPath>
                                     <directory>${project.build.directory}/</directory>
                                     <include>ROOT.war</include>
-                                </resource>
-                                <resource>
-                                    <targetPath>/root/coolmonkey/</targetPath>
-                                    <directory>/opt/coolmonkey-docker/mount/app/coolfsms/${project.environment}/
-                                    </directory>
-                                    <include>*</include>
-                                </resource>
-                                <resource>
-                                    <targetPath>/root/coolmonkey/</targetPath>
-                                    <directory>/opt/coolmonkey-docker/mount/app/common/${project.environment}/
-                                    </directory>
-                                    <include>*</include>
-                                </resource>
-                                <resource>
-                                    <targetPath>/root/coolmonkey/</targetPath>
-                                    <directory>/opt/coolmonkey-docker/tools/newrelic/</directory>
-                                    <include>newrelic.jar</include>
                                 </resource>
                             </resources>
                             <exposes>8080</exposes>
