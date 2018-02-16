@@ -64,11 +64,10 @@ public class StorageResource {
         final String contentType = body.getHeaders().getFirst("FileOrigin-MediaType");
         final String fileOriginString = body.getHeaders().getFirst("FileOrigin-FileOrigin");
         final String uploadFileMaxSize = body.getHeaders().getFirst("FileOrigin-UploadFile-MaxSize");
-        final FileOriginModel fileOriginModel = StringUtils.isNotBlank(fileOriginString) ? FileOriginModel.valueOf(fileOriginString) : null;
         final Long uploadFileMaxSizeLong = StringUtils.isNotBlank(uploadFileMaxSize) ? Long.valueOf(uploadFileMaxSize) : null;
+        final FileOriginModel fileOriginModel = StringUtils.isNotBlank(fileOriginString) ? FileOriginModel.valueOf(fileOriginString) : null;
         final FileUploadModel fileUploadModel = new FileUploadModel(inputStream, decodeUrlEncodedString(fileName), contentType, fileOriginModel);
-        final UploadFileRequest uploadFileRequest = new UploadFileRequest(fileUploadModel);
-        uploadFileRequest.setMaxFileLength(uploadFileMaxSizeLong);
+        final UploadFileRequest uploadFileRequest = new UploadFileRequest(fileUploadModel, uploadFileMaxSizeLong);
         return Response.ok(storageFacade.upload(uploadFileRequest)).build();
     }
 
