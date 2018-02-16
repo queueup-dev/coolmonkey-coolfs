@@ -31,7 +31,7 @@ public class CommonTestHelper {
 
     //region File store
     public FileMetaDataDto createFileMetaDataDto() {
-        return new FileMetaDataDto(UUID.randomUUID().toString(), FileOrigin.IMPORT_CSV);
+        return new FileMetaDataDto(UUID.randomUUID().toString(), FileOrigin.CONTENT_PARTNER_LOGO);
     }
 
     public FileStoreDto createFileStoreDto() {

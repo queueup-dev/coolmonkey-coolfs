@@ -65,7 +65,7 @@ public class StorageFacadeConversionComponentImplTest extends AbstractFacadeImpl
     public void testBuildFileStoreDtoFromUploadFileModel() {
         // Test data
         final FileUploadModel model = getHelper().createFileUploadModel();
-        final FileOrigin fileOrigin = FileOrigin.IMPORT_CSV;
+        final FileOrigin fileOrigin = FileOrigin.CONTENT_PARTNER_LOGO;
         // Reset
         resetAll();
         // Expectations

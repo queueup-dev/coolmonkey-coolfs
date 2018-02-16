@@ -117,7 +117,7 @@ public class StorageServiceImplTest extends AbstractServiceImplTest {
         // Test data
         final FileStoreDto dto = getHelper().createFileStoreDto();
         final String uuid = UUID.randomUUID().toString();
-        final FileOrigin fileOrigin = FileOrigin.IMPORT_CSV;
+        final FileOrigin fileOrigin = FileOrigin.CONTENT_PARTNER_LOGO;
         dto.setFileMetaDataDto(new FileMetaDataDto(uuid, fileOrigin));
         final GridFSDBFile gridFSDBFile = getHelper().createGridFSDBFile();
         gridFSDBFile.getMetaData().put("uuid", uuid);
