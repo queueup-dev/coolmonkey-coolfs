@@ -1,7 +1,7 @@
 package com.sfl.coolmonkey.coolfs.api.model.storage.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sfl.coolmonkey.commons.api.model.response.AbstractResponseModel;
+import com.sfl.coolmonkey.coolfs.api.model.common.request.AbstractRequestModel;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,7 +14,7 @@ import java.util.List;
  * Date: 2/18/16
  * Time: 5:03 PM
  */
-public class GetFileInfoByUuidListRequest extends AbstractResponseModel {
+public class GetFileInfoByUuidListRequest extends AbstractRequestModel {
     private static final long serialVersionUID = -467496891116246166L;
 
     //region Properties

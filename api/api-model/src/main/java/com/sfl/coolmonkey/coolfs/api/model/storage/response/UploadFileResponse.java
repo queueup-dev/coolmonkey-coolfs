@@ -1,7 +1,7 @@
 package com.sfl.coolmonkey.coolfs.api.model.storage.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sfl.coolmonkey.commons.api.model.response.AbstractResponseModel;
+import com.sfl.coolmonkey.coolfs.api.model.common.response.AbstractResponseModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.StoredFileInfoModel;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

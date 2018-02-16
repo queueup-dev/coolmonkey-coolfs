@@ -1,8 +1,14 @@
 package com.sfl.coolmonkey.coolfs.facade.storage;
 
-import com.sfl.coolmonkey.commons.api.model.response.ResultResponseModel;
-import com.sfl.coolmonkey.coolfs.api.model.storage.request.*;
-import com.sfl.coolmonkey.coolfs.api.model.storage.response.*;
+import com.sfl.coolmonkey.coolfs.api.model.common.response.ResultResponseModel;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.GetFileInfoByUuidListRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.GetFileInfoByUuidRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.LoadFileByUuidRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.UploadFileRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.GetFileInfoByUuidListResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.GetFileInfoByUuidResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.LoadFileByUuidResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.UploadFileResponse;
 
 import javax.annotation.Nonnull;
 
@@ -24,7 +30,4 @@ public interface StorageFacade {
 
     @Nonnull
     ResultResponseModel<LoadFileByUuidResponse> loadFileByUuid(@Nonnull final LoadFileByUuidRequest request);
-
-    @Nonnull
-    ResultResponseModel<CheckImportAlreadyUploadedResponse> checkImportAlreadyUploaded(@Nonnull final CheckImportAlreadyUploadedRequest request);
 }

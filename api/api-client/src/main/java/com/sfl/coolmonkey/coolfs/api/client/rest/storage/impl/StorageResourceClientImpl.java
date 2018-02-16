@@ -1,12 +1,18 @@
 package com.sfl.coolmonkey.coolfs.api.client.rest.storage.impl;
 
-import com.sfl.coolmonkey.commons.api.model.response.ResultResponseModel;
 import com.sfl.coolmonkey.coolfs.api.client.rest.common.AbstractResourceClient;
 import com.sfl.coolmonkey.coolfs.api.client.rest.storage.StorageResourceClient;
+import com.sfl.coolmonkey.coolfs.api.model.common.response.ResultResponseModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileLoadModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileUploadModel;
-import com.sfl.coolmonkey.coolfs.api.model.storage.request.*;
-import com.sfl.coolmonkey.coolfs.api.model.storage.response.*;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.GetFileInfoByUuidListRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.GetFileInfoByUuidRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.LoadFileByUuidRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.UploadFileRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.GetFileInfoByUuidListResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.GetFileInfoByUuidResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.LoadFileByUuidResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.UploadFileResponse;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.MultiPart;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
@@ -57,23 +63,27 @@ public class StorageResourceClientImpl extends AbstractResourceClient implements
     @Nonnull
     @Override
     public ResultResponseModel<UploadFileResponse> upload(@Nonnull final UploadFileRequest request) {
-        final MultiPart multiPart = new MultiPart();
-        final FileUploadModel model = request.getModel();
-        final FileDataBodyPart fileDataBodyPart = new FileDataBodyPart("file", streamToFile(model.getInputStream()), MediaType.MULTIPART_FORM_DATA_TYPE);
-        fileDataBodyPart.getHeaders().add("FileOrigin-Name", model.getFileName());
-        fileDataBodyPart.getHeaders().add("FileOrigin-MediaType", model.getContentType());
-        fileDataBodyPart.getHeaders().add("FileOrigin-CompanyUuid", request.getCompanyUuid());
-        fileDataBodyPart.getHeaders().add("FileOrigin-FileOrigin", model.getFileOrigin().toString());
-        fileDataBodyPart.getHeaders().add("UploadFile-MaxSize", request.getMaxFileLength() != null ? request.getMaxFileLength().toString() : "");
-        multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
-        multiPart.bodyPart(fileDataBodyPart);
-        return getClient()
-                .target(getApiPath())
-                .path(RESOURCE_BASE_PATH)
-                .path(UPLOAD_FILE_PATH)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(multiPart, multiPart.getMediaType()), new GenericType<ResultResponseModel<UploadFileResponse>>() {
-                });
+        try (final MultiPart multiPart = new MultiPart()) {
+            final FileUploadModel model = request.getModel();
+            final FileDataBodyPart fileDataBodyPart = new FileDataBodyPart("file", streamToFile(model.getInputStream()), MediaType.MULTIPART_FORM_DATA_TYPE);
+            fileDataBodyPart.getHeaders().add("FileOrigin-Name", model.getFileName());
+            fileDataBodyPart.getHeaders().add("FileOrigin-MediaType", model.getContentType());
+            fileDataBodyPart.getHeaders().add("FileOrigin-FileOrigin", model.getFileOrigin().toString());
+            fileDataBodyPart.getHeaders().add("UploadFile-MaxSize", request.getMaxFileLength() != null ? request.getMaxFileLength().toString() : "");
+            multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
+            multiPart.bodyPart(fileDataBodyPart);
+            return getClient()
+                    .target(getApiPath())
+                    .path(RESOURCE_BASE_PATH)
+                    .path(UPLOAD_FILE_PATH)
+                    .request(MediaType.APPLICATION_JSON_TYPE)
+                    .post(Entity.entity(multiPart, multiPart.getMediaType()), new GenericType<ResultResponseModel<UploadFileResponse>>() {
+                    });
+        } catch (final IOException e) {
+            LOGGER.error("Unexpected IO exception occurs in coolfs - {}", e);
+        }
+        LOGGER.error("Can not handle request - {}", request);
+        throw new IllegalArgumentException("Can not handle request - " + request);
     }
 
     @Nonnull
@@ -121,23 +131,10 @@ public class StorageResourceClientImpl extends AbstractResourceClient implements
         );
         return new ResultResponseModel<>(new LoadFileByUuidResponse(fileLoadModel));
     }
-
-    @Nonnull
-    @Override
-    public ResultResponseModel<CheckImportAlreadyUploadedResponse> checkImportAlreadyUploaded(@Nonnull final CheckImportAlreadyUploadedRequest request) {
-        Assert.notNull(request);
-        return getClient()
-                .target(getApiPath())
-                .path(RESOURCE_BASE_PATH)
-                .path("check-import-already-uploaded")
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), new GenericType<ResultResponseModel<CheckImportAlreadyUploadedResponse>>() {
-                });
-    }
     //endregion
 
     //region Utility methods
-    private static File streamToFile(InputStream in) {
+    private static File streamToFile(final InputStream in) {
         File tempFile = null;
         try {
             tempFile = File.createTempFile(PREFIX, SUFFIX);

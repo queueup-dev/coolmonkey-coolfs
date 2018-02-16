@@ -1,6 +1,6 @@
 package com.sfl.coolmonkey.coolfs.api.model.storage.request;
 
-import com.sfl.coolmonkey.commons.api.model.request.AbstractCompanyUuidAwareRequestModel;
+import com.sfl.coolmonkey.coolfs.api.model.common.request.AbstractRequestModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileUploadModel;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -12,7 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * Date: 2/18/16
  * Time: 3:20 PM
  */
-public class UploadFileRequest extends AbstractCompanyUuidAwareRequestModel {
+public class UploadFileRequest extends AbstractRequestModel {
     private static final long serialVersionUID = 4999298567725747520L;
 
     //region Properties
@@ -32,11 +32,6 @@ public class UploadFileRequest extends AbstractCompanyUuidAwareRequestModel {
     public UploadFileRequest(final FileUploadModel model, final Long maxFileLength) {
         this.model = model;
         this.maxFileLength = maxFileLength;
-    }
-
-    public UploadFileRequest(final String companyUuid, final FileUploadModel model) {
-        super(companyUuid);
-        this.model = model;
     }
     //endregion
 

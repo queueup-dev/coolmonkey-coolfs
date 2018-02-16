@@ -220,11 +220,6 @@
                 <artifactId>jsr305</artifactId>
                 <version>${findbugs.jsr305.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.sfl.coolmonkey.commons.api</groupId>
-                <artifactId>api-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

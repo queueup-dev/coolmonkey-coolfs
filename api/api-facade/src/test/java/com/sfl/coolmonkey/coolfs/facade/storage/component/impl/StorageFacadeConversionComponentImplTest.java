@@ -79,7 +79,6 @@ public class StorageFacadeConversionComponentImplTest extends AbstractFacadeImpl
         assertNotNull(dto);
         assertEquals(model.getFileName(), dto.getFileName());
         assertEquals(model.getContentType(), dto.getContentType());
-        assertNull(dto.getFileMetaDataDto().getCompanyUuid());
         assertEquals(fileOrigin, dto.getFileMetaDataDto().getFileOrigin());
     }
     //endregion

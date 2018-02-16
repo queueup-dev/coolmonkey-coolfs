@@ -1,6 +1,6 @@
 package com.sfl.coolmonkey.coolfs.facade.storage.component;
 
-import com.sfl.coolmonkey.commons.api.model.CommonErrorType;
+import com.sfl.coolmonkey.coolfs.api.model.common.CommonErrorType;
 import com.sfl.coolmonkey.coolfs.service.storage.model.FileStoreData;
 
 import javax.annotation.Nonnull;

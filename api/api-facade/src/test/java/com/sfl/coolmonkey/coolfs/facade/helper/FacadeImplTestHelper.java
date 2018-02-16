@@ -1,8 +1,8 @@
 package com.sfl.coolmonkey.coolfs.facade.helper;
 
-import com.sfl.coolmonkey.commons.api.model.CommonErrorType;
-import com.sfl.coolmonkey.commons.api.model.response.AbstractResponseModel;
-import com.sfl.coolmonkey.commons.api.model.response.ResultResponseModel;
+import com.sfl.coolmonkey.coolfs.api.model.common.CommonErrorType;
+import com.sfl.coolmonkey.coolfs.api.model.common.response.AbstractResponseModel;
+import com.sfl.coolmonkey.coolfs.api.model.common.response.ResultResponseModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileLoadModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileOriginModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileUploadModel;
@@ -23,14 +23,6 @@ import static org.junit.Assert.*;
  * Time: 2:51 PM
  */
 public final class FacadeImplTestHelper extends CommonTestHelper {
-
-    //region Constants
-    //endregion
-
-    //region Constructors
-    public FacadeImplTestHelper() {
-    }
-    //endregion
 
     //region Public methods
     public void assertValidationErrors(final ResultResponseModel<? extends AbstractResponseModel> result,

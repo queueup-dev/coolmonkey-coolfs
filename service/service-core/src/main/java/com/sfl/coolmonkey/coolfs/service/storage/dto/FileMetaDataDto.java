@@ -19,8 +19,6 @@ public class FileMetaDataDto implements Serializable {
     //region Properties
     private String uuid;
 
-    private String companyUuid;
-
     private FileOrigin fileOrigin;
     //endregion
 
@@ -30,12 +28,6 @@ public class FileMetaDataDto implements Serializable {
 
     public FileMetaDataDto(final String uuid, final FileOrigin fileOrigin) {
         this.uuid = uuid;
-        this.fileOrigin = fileOrigin;
-    }
-
-    public FileMetaDataDto(final String uuid, final String companyUuid, final FileOrigin fileOrigin) {
-        this.uuid = uuid;
-        this.companyUuid = companyUuid;
         this.fileOrigin = fileOrigin;
     }
     //endregion
@@ -52,7 +44,6 @@ public class FileMetaDataDto implements Serializable {
         final FileMetaDataDto that = (FileMetaDataDto) o;
         return new EqualsBuilder()
                 .append(uuid, that.uuid)
-                .append(companyUuid, that.companyUuid)
                 .append(fileOrigin, that.fileOrigin)
                 .isEquals();
     }
@@ -61,7 +52,6 @@ public class FileMetaDataDto implements Serializable {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(uuid)
-                .append(companyUuid)
                 .append(fileOrigin)
                 .toHashCode();
     }
@@ -70,7 +60,6 @@ public class FileMetaDataDto implements Serializable {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("uuid", uuid)
-                .append("companyUuid", companyUuid)
                 .append("fileOrigin", fileOrigin)
                 .toString();
     }
@@ -83,14 +72,6 @@ public class FileMetaDataDto implements Serializable {
 
     public void setUuid(final String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getCompanyUuid() {
-        return companyUuid;
-    }
-
-    public void setCompanyUuid(final String companyUuid) {
-        this.companyUuid = companyUuid;
     }
 
     public FileOrigin getFileOrigin() {

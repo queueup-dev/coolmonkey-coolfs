@@ -1,6 +1,6 @@
 package com.sfl.coolmonkey.coolfs.api.model.storage.request;
 
-import com.sfl.coolmonkey.commons.api.model.request.AbstractRequestModel;
+import com.sfl.coolmonkey.coolfs.api.model.common.request.AbstractRequestModel;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

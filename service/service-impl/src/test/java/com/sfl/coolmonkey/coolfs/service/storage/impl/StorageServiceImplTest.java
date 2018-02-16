@@ -115,9 +115,8 @@ public class StorageServiceImplTest extends AbstractServiceImplTest {
         // Test data
         final FileStoreDto dto = getHelper().createFileStoreDto();
         final String uuid = UUID.randomUUID().toString();
-        final String companyUuid = UUID.randomUUID().toString();
         final FileOrigin fileOrigin = FileOrigin.IMPORT_CSV;
-        dto.setFileMetaDataDto(new FileMetaDataDto(uuid, companyUuid, fileOrigin));
+        dto.setFileMetaDataDto(new FileMetaDataDto(uuid, fileOrigin));
         final GridFSDBFile gridFSDBFile = getHelper().createGridFSDBFile();
         gridFSDBFile.getMetaData().put("uuid", uuid);
         final FileStoreData fileStoreData = getHelper().createFileStoreData(uuid);
@@ -136,7 +135,6 @@ public class StorageServiceImplTest extends AbstractServiceImplTest {
         assertNotNull(result);
         assertEquals(fileStoreData.getUuid(), result);
         assertEquals(uuid, capturedMetaData.getValue().get("uuid"));
-        assertEquals(companyUuid, capturedMetaData.getValue().get("companyUuid"));
         assertEquals(fileOrigin.toString(), capturedMetaData.getValue().get("fileOrigin"));
     }
     //endregion

@@ -1,13 +1,19 @@
 package com.sfl.coolmonkey.coolfs.facade.storage.impl;
 
-import com.sfl.coolmonkey.commons.api.model.CommonErrorType;
-import com.sfl.coolmonkey.commons.api.model.response.ResultResponseModel;
+import com.sfl.coolmonkey.coolfs.api.model.common.CommonErrorType;
+import com.sfl.coolmonkey.coolfs.api.model.common.response.ResultResponseModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileLoadModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileOriginModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileUploadModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.StoredFileInfoModel;
-import com.sfl.coolmonkey.coolfs.api.model.storage.request.*;
-import com.sfl.coolmonkey.coolfs.api.model.storage.response.*;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.GetFileInfoByUuidListRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.GetFileInfoByUuidRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.LoadFileByUuidRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.UploadFileRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.GetFileInfoByUuidListResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.GetFileInfoByUuidResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.LoadFileByUuidResponse;
+import com.sfl.coolmonkey.coolfs.api.model.storage.response.UploadFileResponse;
 import com.sfl.coolmonkey.coolfs.facade.storage.StorageFacade;
 import com.sfl.coolmonkey.coolfs.facade.storage.component.StorageFacadeConversionComponent;
 import com.sfl.coolmonkey.coolfs.facade.storage.component.StorageFacadeValidationComponent;
@@ -15,10 +21,8 @@ import com.sfl.coolmonkey.coolfs.facade.test.AbstractFacadeImplTest;
 import com.sfl.coolmonkey.coolfs.service.storage.StorageService;
 import com.sfl.coolmonkey.coolfs.service.storage.dto.FileMetaDataDto;
 import com.sfl.coolmonkey.coolfs.service.storage.dto.FileStoreDto;
-import com.sfl.coolmonkey.coolfs.service.storage.model.FileOrigin;
 import com.sfl.coolmonkey.coolfs.service.storage.model.FileStoreData;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.SerializationUtils;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
@@ -63,12 +67,6 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
     public void testUploadWithInvalidArguments() {
         // Test data
         final String validUuid = UUID.randomUUID().toString();
-        final FileUploadModel validFileUploadModel = new FileUploadModel(
-                IOUtils.toInputStream("hi"),
-                "fileName",
-                "text/txt",
-                FileOriginModel.IMPORT_CSV
-        );
         // Reset
         resetAll();
         // Expectations
@@ -82,28 +80,28 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
             // Expected
         }
         try {
-            storageFacade.upload(new UploadFileRequest(validUuid, null));
+            storageFacade.upload(new UploadFileRequest(null));
             fail("Exception should be thrown");
         } catch (final IllegalArgumentException ex) {
             // Expected
         }
         FileUploadModel invalidFileUploadModel = new FileUploadModel(null, "fileName", "text/txt", FileOriginModel.IMPORT_CSV);
         try {
-            storageFacade.upload(new UploadFileRequest(validUuid, invalidFileUploadModel));
+            storageFacade.upload(new UploadFileRequest(invalidFileUploadModel));
             fail("Exception should be thrown");
         } catch (final IllegalArgumentException ex) {
             // Expected
         }
         invalidFileUploadModel = new FileUploadModel(IOUtils.toInputStream("hi"), null, "text/txt", FileOriginModel.IMPORT_CSV);
         try {
-            storageFacade.upload(new UploadFileRequest(validUuid, invalidFileUploadModel));
+            storageFacade.upload(new UploadFileRequest(invalidFileUploadModel));
             fail("Exception should be thrown");
         } catch (final IllegalArgumentException ex) {
             // Expected
         }
         invalidFileUploadModel = new FileUploadModel(IOUtils.toInputStream("hi"), "fileName", "text/txt", null);
         try {
-            storageFacade.upload(new UploadFileRequest(validUuid, invalidFileUploadModel));
+            storageFacade.upload(new UploadFileRequest(invalidFileUploadModel));
             fail("Exception should be thrown");
         } catch (final IllegalArgumentException ex) {
             // Expected
@@ -115,10 +113,9 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
     @Test
     public void testUploadWhenFileLengthIsGreaterThanFileMaxLength() {
         // Test data
-        final String companyUuid = UUID.randomUUID().toString();
         final FileUploadModel uploadModel = getHelper().createFileUploadModel();
         final String uuid = uploadModel.getUuid();
-        final UploadFileRequest request = new UploadFileRequest(companyUuid, uploadModel);
+        final UploadFileRequest request = new UploadFileRequest(uploadModel);
         request.setMaxFileLength((long) 2 * 1024);
         final FileStoreData fileStoreData = getHelper().createFileStoreData();
         final FileStoreDto dto = new FileStoreDto(
@@ -127,7 +124,7 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
                 uploadModel.getContentType(),
                 new FileMetaDataDto()
         );
-        final Map<CommonErrorType, Object> errors = new HashMap<>();
+        final Map<CommonErrorType, Object> errors = new EnumMap<>(CommonErrorType.class);
         errors.put(CommonErrorType.IMPORT_FILE_MAX_SIZE_EXCEEDED, null);
         // Reset
         resetAll();
@@ -151,10 +148,9 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
     @Test
     public void testUpload() {
         // Test data
-        final String companyUuid = UUID.randomUUID().toString();
         final FileUploadModel uploadModel = getHelper().createFileUploadModel();
         final String uuid = uploadModel.getUuid();
-        final UploadFileRequest request = new UploadFileRequest(companyUuid, uploadModel);
+        final UploadFileRequest request = new UploadFileRequest(uploadModel);
         final FileStoreData fileStoreData = getHelper().createFileStoreData();
         final FileStoreDto dto = new FileStoreDto(
                 uploadModel.getInputStream(),
@@ -180,7 +176,6 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
         assertNotNull(result);
         assertNotNull(result.getResponse());
         assertEquals(result.getResponse().getFileInfo(), infoModel);
-        assertEquals(companyUuid, dto.getFileMetaDataDto().getCompanyUuid());
     }
     //endregion
 
@@ -334,110 +329,6 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
         assertEquals(fileLoadModel, result.getResponse().getLoadFileModel());
         // Verify
         verifyAll();
-    }
-    //endregion
-
-    //region checkImportAlreadyUploaded
-    @Test
-    public void testCheckImportAlreadyUploadedWithInvalidArguments() {
-        // Test data
-        final CheckImportAlreadyUploadedRequest validRequest = new CheckImportAlreadyUploadedRequest(
-                UUID.randomUUID().toString(),
-                "fileName",
-                new Date()
-        );
-        CheckImportAlreadyUploadedRequest invalidRequest;
-        // Reset
-        resetAll();
-        // Expectations
-        // Replay
-        replayAll();
-        // Run test scenario
-        try {
-            storageFacade.checkImportAlreadyUploaded(null);
-            fail("Exception should be thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        invalidRequest = SerializationUtils.clone(validRequest);
-        invalidRequest.setCompanyUuid(null);
-        try {
-            storageFacade.checkImportAlreadyUploaded(invalidRequest);
-            fail("Exception should be thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        invalidRequest = SerializationUtils.clone(validRequest);
-        invalidRequest.setCreatedAfter(null);
-        try {
-            storageFacade.checkImportAlreadyUploaded(invalidRequest);
-            fail("Exception should be thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        invalidRequest = SerializationUtils.clone(validRequest);
-        invalidRequest.setFileName(null);
-        try {
-            storageFacade.checkImportAlreadyUploaded(invalidRequest);
-            fail("Exception should be thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        // Verify
-        verifyAll();
-    }
-
-    @Test
-    public void testCheckImportAlreadyUploadedWhenDoesNotExist() {
-        // Test data
-        final String companyUuid = UUID.randomUUID().toString();
-        final String fileName = "fileName";
-        final Date createdAfter = new Date();
-        final CheckImportAlreadyUploadedRequest request = new CheckImportAlreadyUploadedRequest(
-                companyUuid,
-                fileName,
-                createdAfter
-        );
-        // Reset
-        resetAll();
-        // Expectations
-        expect(storageService.getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(companyUuid, fileName, createdAfter, FileOrigin.IMPORT_CSV)).andReturn(Collections.emptyList());
-        // Replay
-        replayAll();
-        // Run test scenario
-        final ResultResponseModel<CheckImportAlreadyUploadedResponse> response = storageFacade.checkImportAlreadyUploaded(request);
-        // Verify
-        verifyAll();
-        assertNotNull(response);
-        assertFalse(response.hasErrors());
-        assertNotNull(response.getResponse());
-        assertEquals(response.getResponse().getUuidList().size(), 0);
-    }
-
-    @Test
-    public void testCheckImportAlreadyUploadedWhenExists() {
-        // Test data
-        final String companyUuid = UUID.randomUUID().toString();
-        final String fileName = "fileName";
-        final Date createdAfter = new Date();
-        final CheckImportAlreadyUploadedRequest request = new CheckImportAlreadyUploadedRequest(
-                companyUuid,
-                fileName,
-                createdAfter
-        );
-        final List<FileStoreData> fileStoreDatas = Collections.singletonList(
-                getHelper().createFileStoreData()
-        );
-        // Reset
-        resetAll();
-        // Expectations
-        expect(storageService.getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(companyUuid, fileName, createdAfter, FileOrigin.IMPORT_CSV)).andReturn(fileStoreDatas);
-        // Replay
-        replayAll();
-        // Run test scenario
-        final ResultResponseModel<CheckImportAlreadyUploadedResponse> response = storageFacade.checkImportAlreadyUploaded(request);
-        // Verify
-        verifyAll();
-        assertNotNull(response);
-        assertFalse(response.hasErrors());
-        assertNotNull(response.getResponse());
-        assertEquals(response.getResponse().getUuidList(), fileStoreDatas.stream().map(FileStoreData::getUuid).collect(Collectors.toList()));
     }
     //endregion
 

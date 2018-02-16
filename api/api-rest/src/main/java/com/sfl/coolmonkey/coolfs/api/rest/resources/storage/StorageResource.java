@@ -1,10 +1,13 @@
 package com.sfl.coolmonkey.coolfs.api.rest.resources.storage;
 
-import com.sfl.coolmonkey.commons.api.model.response.ResultResponseModel;
+import com.sfl.coolmonkey.coolfs.api.model.common.response.ResultResponseModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileLoadModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileOriginModel;
 import com.sfl.coolmonkey.coolfs.api.model.storage.FileUploadModel;
-import com.sfl.coolmonkey.coolfs.api.model.storage.request.*;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.GetFileInfoByUuidListRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.GetFileInfoByUuidRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.LoadFileByUuidRequest;
+import com.sfl.coolmonkey.coolfs.api.model.storage.request.UploadFileRequest;
 import com.sfl.coolmonkey.coolfs.api.model.storage.response.LoadFileByUuidResponse;
 import com.sfl.coolmonkey.coolfs.facade.storage.StorageFacade;
 import org.apache.commons.codec.DecoderException;
@@ -57,14 +60,13 @@ public class StorageResource {
                            @FormDataParam("file") FormDataBodyPart body) {
         final String fileName = body.getHeaders().getFirst("FileOrigin-Name");
         final String contentType = body.getHeaders().getFirst("FileOrigin-MediaType");
-        final String companyUuid = body.getHeaders().getFirst("FileOrigin-CompanyUuid");
         final String fileOriginString = body.getHeaders().getFirst("FileOrigin-FileOrigin");
         final String uploadFileMaxSize = body.getHeaders().getFirst("UploadFile-MaxSize");
         final FileOriginModel fileOriginModel = fileOriginString != null && !fileOriginString.isEmpty() ? FileOriginModel.valueOf(fileOriginString) : null;
         Assert.notNull(fileName, "The file name should not be null");
         final FileUploadModel fileUploadModel = new FileUploadModel(inputStream, decodeUrlEncodedString(fileName), contentType, fileOriginModel);
         final Long uploadFileMaxSizeLong = uploadFileMaxSize != null && !uploadFileMaxSize.isEmpty() ? Long.valueOf(uploadFileMaxSize) : null;
-        final UploadFileRequest uploadFileRequest = new UploadFileRequest(companyUuid, fileUploadModel);
+        final UploadFileRequest uploadFileRequest = new UploadFileRequest(fileUploadModel);
         uploadFileRequest.setMaxFileLength(uploadFileMaxSizeLong);
         return Response.ok(storageFacade.upload(uploadFileRequest)).build();
     }
@@ -101,12 +103,6 @@ public class StorageResource {
         final ResultResponseModel<LoadFileByUuidResponse> result = storageFacade.loadFileByUuid(request);
         final FileLoadModel loadFileModel = result.getResponse().getLoadFileModel();
         return Response.ok(loadFileModel.getInputStream(), loadFileModel.getContentType()).build();
-    }
-
-    @POST
-    @Path("check-import-already-uploaded")
-    public Response checkImportAlreadyUploaded(final CheckImportAlreadyUploadedRequest request) {
-        return Response.ok(storageFacade.checkImportAlreadyUploaded(request)).build();
     }
 
     @GET

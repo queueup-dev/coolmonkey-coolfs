@@ -27,23 +27,11 @@ import java.util.UUID;
 })
 public class CommonTestHelper {
 
-    //region Constants
-    //endregion
-
-    //region Constructors
-    public CommonTestHelper() {
-    }
-    //endregion
-
     //region Public methods
 
     //region File store
     public FileMetaDataDto createFileMetaDataDto() {
-        return new FileMetaDataDto(
-                UUID.randomUUID().toString(),
-                UUID.randomUUID().toString(),
-                FileOrigin.IMPORT_CSV
-        );
+        return new FileMetaDataDto(UUID.randomUUID().toString(), FileOrigin.IMPORT_CSV);
     }
 
     public FileStoreDto createFileStoreDto() {

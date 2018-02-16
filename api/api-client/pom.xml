@@ -28,10 +28,6 @@
             <artifactId>jersey-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.sfl.coolmonkey.commons.api</groupId>
-            <artifactId>api-model</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
         </dependency>
@@ -64,11 +60,6 @@
                 <groupId>org.glassfish.jersey.core</groupId>
                 <artifactId>jersey-client</artifactId>
                 <version>${jersey.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sfl.coolmonkey.commons.api</groupId>
-                <artifactId>api-model</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>

@@ -57,7 +57,6 @@ public class StorageServiceImpl implements StorageService {
         final DBObject metaData = new BasicDBObject();
         // In future add more meta data from dto.getFileMetaDataDto() if needed
         metaData.put("uuid", generateUuidIfNull(dto));
-        metaData.put("companyUuid", dto.getFileMetaDataDto().getCompanyUuid());
         // At this point mongodb does not serialize java enums, see https://jira.mongodb.org/browse/JAVA-268
         // That's why we have to serialize file origin enum as string here
         metaData.put("fileOrigin", dto.getFileMetaDataDto().getFileOrigin().toString());

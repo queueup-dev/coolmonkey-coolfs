@@ -1,6 +1,6 @@
 package com.sfl.coolmonkey.coolfs.facade.storage.component.impl;
 
-import com.sfl.coolmonkey.commons.api.model.CommonErrorType;
+import com.sfl.coolmonkey.coolfs.api.model.common.CommonErrorType;
 import com.sfl.coolmonkey.coolfs.facade.storage.component.StorageFacadeValidationComponent;
 import com.sfl.coolmonkey.coolfs.facade.test.AbstractFacadeImplTest;
 import com.sfl.coolmonkey.coolfs.service.storage.model.FileStoreData;
