@@ -111,15 +111,4 @@
         </pluginManagement>
     </build>
 
-    <repositories>
-        <repository>
-            <id>coolmonkey-release</id>
-            <url>http://maven.sflpro.com/content/repositories/coolmonkey-release/</url>
-        </repository>
-        <repository>
-            <id>maven-central</id>
-            <url>https://repo.maven.apache.org/maven2/</url>
-        </repository>
-    </repositories>
-
 </project>
