@@ -69,7 +69,7 @@ public class StorageResourceClientImpl extends AbstractResourceClient implements
             fileDataBodyPart.getHeaders().add("FileOrigin-Name", model.getFileName());
             fileDataBodyPart.getHeaders().add("FileOrigin-MediaType", model.getContentType());
             fileDataBodyPart.getHeaders().add("FileOrigin-FileOrigin", model.getFileOrigin().toString());
-            fileDataBodyPart.getHeaders().add("UploadFile-MaxSize", request.getMaxFileLength() != null ? request.getMaxFileLength().toString() : "");
+            fileDataBodyPart.getHeaders().add("FileOrigin-UploadFile-MaxSize", request.getMaxFileLength() != null ? request.getMaxFileLength().toString() : "");
             multiPart.setMediaType(MediaType.MULTIPART_FORM_DATA_TYPE);
             multiPart.bodyPart(fileDataBodyPart);
             return getClient()

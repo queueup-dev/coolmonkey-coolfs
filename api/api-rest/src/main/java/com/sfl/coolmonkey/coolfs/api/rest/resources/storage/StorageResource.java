@@ -12,6 +12,7 @@ import com.sfl.coolmonkey.coolfs.api.model.storage.response.LoadFileByUuidRespon
 import com.sfl.coolmonkey.coolfs.facade.storage.StorageFacade;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.net.URLCodec;
+import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -59,13 +60,13 @@ public class StorageResource {
                            @FormDataParam("file") final FormDataContentDisposition fileDetail,
                            @FormDataParam("file") FormDataBodyPart body) {
         final String fileName = body.getHeaders().getFirst("FileOrigin-Name");
+        Assert.notNull(fileName, "The file name should not be null");
         final String contentType = body.getHeaders().getFirst("FileOrigin-MediaType");
         final String fileOriginString = body.getHeaders().getFirst("FileOrigin-FileOrigin");
-        final String uploadFileMaxSize = body.getHeaders().getFirst("UploadFile-MaxSize");
-        final FileOriginModel fileOriginModel = fileOriginString != null && !fileOriginString.isEmpty() ? FileOriginModel.valueOf(fileOriginString) : null;
-        Assert.notNull(fileName, "The file name should not be null");
+        final String uploadFileMaxSize = body.getHeaders().getFirst("FileOrigin-UploadFile-MaxSize");
+        final FileOriginModel fileOriginModel = StringUtils.isNotBlank(fileOriginString) ? FileOriginModel.valueOf(fileOriginString) : null;
+        final Long uploadFileMaxSizeLong = StringUtils.isNotBlank(uploadFileMaxSize) ? Long.valueOf(uploadFileMaxSize) : null;
         final FileUploadModel fileUploadModel = new FileUploadModel(inputStream, decodeUrlEncodedString(fileName), contentType, fileOriginModel);
-        final Long uploadFileMaxSizeLong = uploadFileMaxSize != null && !uploadFileMaxSize.isEmpty() ? Long.valueOf(uploadFileMaxSize) : null;
         final UploadFileRequest uploadFileRequest = new UploadFileRequest(fileUploadModel);
         uploadFileRequest.setMaxFileLength(uploadFileMaxSizeLong);
         return Response.ok(storageFacade.upload(uploadFileRequest)).build();
@@ -106,7 +107,7 @@ public class StorageResource {
     }
 
     @GET
-    @Path("/heartbeat")
+    @Path("heartbeat")
     public Response getHeartBeat() {
         return Response.ok("OK").build();
     }
@@ -117,7 +118,7 @@ public class StorageResource {
     private String decodeUrlEncodedString(final String encodedString) {
         try {
             return new URLCodec().decode(encodedString);
-        } catch (DecoderException ignore) {
+        } catch (final DecoderException ignore) {
             // Ignore
         }
         return null;

@@ -24,11 +24,6 @@ import org.springframework.stereotype.Component;
 public class ResourceMethodLoggingAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceMethodLoggingAspect.class);
 
-    //region Constructors
-    public ResourceMethodLoggingAspect() {
-    }
-    //endregion
-
     //region Public methods
     @Around("execution(public * com.sfl.coolmonkey.coolfs.api.rest.resources.*..* (..))")
     public Object around(final ProceedingJoinPoint point) throws Throwable {
@@ -45,8 +40,7 @@ public class ResourceMethodLoggingAspect {
         return result;
     }
 
-    @AfterThrowing(value = "execution(public * com.sfl.coolmonkey.coolfs.api.rest.resources.*..* (..))",
-            throwing = "e")
+    @AfterThrowing(value = "execution(public * com.sfl.coolmonkey.coolfs.api.rest.resources.*..* (..))", throwing = "e")
     public void afterThrowing(final JoinPoint point, final Exception e) {
         LOGGER.error(
                 "#{}.{}({}):",

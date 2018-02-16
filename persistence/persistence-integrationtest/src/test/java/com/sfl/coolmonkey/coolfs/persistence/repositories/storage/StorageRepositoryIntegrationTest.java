@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -25,11 +24,6 @@ public class StorageRepositoryIntegrationTest extends AbstractPersistenceIntegra
     //region Dependencies
     @Autowired
     private StorageRepository storageRepository;
-    //endregion
-
-    //region Constructors
-    public StorageRepositoryIntegrationTest() {
-    }
     //endregion
 
     //region Test methods
@@ -61,17 +55,6 @@ public class StorageRepositoryIntegrationTest extends AbstractPersistenceIntegra
         // prepare data
         // run test scenario
         storageRepository.findByMetaUuidIn(Collections.singletonList(UUID.randomUUID().toString()));
-    }
-
-    @Test
-    public void testFindByMetaCompanyUuidAndFilenameAndUploadDateGreaterThanAndMetaFileOrigin() {
-        // prepare data
-        // run test scenario
-        storageRepository.findByMetaCompanyUuidAndFilenameAndUploadDateGreaterThanAndMetaFileOrigin(
-                UUID.randomUUID().toString(),
-                "test file name",
-                new Date(), "test file origin"
-        );
     }
 
     @Test

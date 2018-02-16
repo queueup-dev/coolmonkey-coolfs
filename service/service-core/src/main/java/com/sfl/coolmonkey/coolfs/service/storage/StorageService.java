@@ -1,12 +1,10 @@
 package com.sfl.coolmonkey.coolfs.service.storage;
 
 import com.sfl.coolmonkey.coolfs.service.storage.dto.FileStoreDto;
-import com.sfl.coolmonkey.coolfs.service.storage.model.FileOrigin;
 import com.sfl.coolmonkey.coolfs.service.storage.model.FileStoreData;
 import org.bson.types.ObjectId;
 
 import javax.annotation.Nonnull;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,21 +48,6 @@ public interface StorageService {
      */
     @Nonnull
     List<FileStoreData> getByMetaUuids(@Nonnull final List<String> uuids);
-
-    /**
-     * Retrieves all files which match given criteria
-     *
-     * @param companyUuid  the company uuid
-     * @param fileName     the file name
-     * @param createdAfter the created after
-     * @param origin       the origin
-     * @return by company uuid and file name and created after and origin
-     */
-    @Nonnull
-    List<FileStoreData> getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(@Nonnull final String companyUuid,
-                                                                            @Nonnull final String fileName,
-                                                                            @Nonnull final Date createdAfter,
-                                                                            @Nonnull final FileOrigin origin);
 
     /**
      * Deletes by meta uuid.

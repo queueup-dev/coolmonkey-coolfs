@@ -42,7 +42,7 @@ public final class FacadeImplTestHelper extends CommonTestHelper {
                 UUID.randomUUID().toString(),
                 "test.jpg",
                 "image/jpg",
-                FileOriginModel.IMPORT_CSV
+                FileOriginModel.CONTENT_PARTNER_LOGO
         );
     }
 

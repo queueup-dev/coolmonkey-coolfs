@@ -7,7 +7,6 @@ import org.bson.types.ObjectId;
 
 import javax.annotation.Nonnull;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,20 +50,6 @@ public interface StorageRepository {
      * @return the list of GridFSDBFile
      */
     List<GridFSDBFile> findByMetaUuidIn(@Nonnull final List<String> uuids);
-
-    /**
-     * Find by meta company uuid and filename and upload date greater than and meta file origin list.
-     *
-     * @param companyUuid  the company uuid
-     * @param fileName     the file name
-     * @param createdAfter the created after
-     * @param fileOrigin   the file origin
-     * @return the list
-     */
-    List<GridFSDBFile> findByMetaCompanyUuidAndFilenameAndUploadDateGreaterThanAndMetaFileOrigin(@Nonnull final String companyUuid,
-                                                                                                 @Nonnull final String fileName,
-                                                                                                 @Nonnull final Date createdAfter,
-                                                                                                 @Nonnull final String fileOrigin);
 
     /**
      * Delete by meta uuid.

@@ -18,7 +18,9 @@ import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
@@ -310,74 +312,6 @@ public class StorageServiceImplTest extends AbstractServiceImplTest {
         assertEquals(fileStoreDataList, result);
         // Verify
         verifyAll();
-    }
-    //endregion
-
-    //region getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin
-    @Test
-    public void testGetByCompanyUuidAndFileNameAndCreatedAfterWithInvalidArguments() {
-        // Test data
-        final String validString = "string";
-        final Date validDate = new Date();
-        final FileOrigin validFileOrigin = FileOrigin.IMPORT_CSV;
-        // Reset
-        resetAll();
-        // Expectations
-        // Replay
-        replayAll();
-        // Run test scenario
-        try {
-            storageService.getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(null, validString, validDate, validFileOrigin);
-            fail("Exception should be thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            storageService.getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(validString, null, validDate, validFileOrigin);
-            fail("Exception should be thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            storageService.getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(validString, validString, null, validFileOrigin);
-            fail("Exception should be thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            storageService.getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(validString, validString, validDate, null);
-            fail("Exception should be thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        // Verify
-        verifyAll();
-    }
-
-    @Test
-    public void testGetByCompanyUuidAndFileNameAndCreatedAfter() {
-        // Test data
-        final String companyUuid = UUID.randomUUID().toString();
-        final String fileName = "fileName";
-        final Date createdAfter = new Date();
-        final List<GridFSDBFile> gridFSDBFiles = Arrays.asList(
-                getHelper().createGridFSDBFile(),
-                getHelper().createGridFSDBFile()
-        );
-        final List<FileStoreData> fileStoreDataList = Arrays.asList(
-                getHelper().createFileStoreData(),
-                getHelper().createFileStoreData()
-        );
-        final FileOrigin fileOrigin = FileOrigin.IMPORT_CSV;
-        // Reset
-        resetAll();
-        // Expectations
-        expect(storageRepository.findByMetaCompanyUuidAndFilenameAndUploadDateGreaterThanAndMetaFileOrigin(companyUuid, fileName, createdAfter, fileOrigin.toString())).andReturn(gridFSDBFiles);
-        expect(storageServiceConversionComponent.convertToFileStoreData(gridFSDBFiles.get(0))).andReturn(fileStoreDataList.get(0));
-        expect(storageServiceConversionComponent.convertToFileStoreData(gridFSDBFiles.get(1))).andReturn(fileStoreDataList.get(1));
-        // Replay
-        replayAll();
-        // Run test scenario
-        final List<FileStoreData> result = storageService.getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(companyUuid, fileName, createdAfter, fileOrigin);
-        // Verify
-        verifyAll();
-        assertEquals(fileStoreDataList, result);
     }
     //endregion
 

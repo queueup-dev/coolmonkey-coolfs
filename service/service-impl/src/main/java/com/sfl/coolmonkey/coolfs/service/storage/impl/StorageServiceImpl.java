@@ -9,7 +9,6 @@ import com.sfl.coolmonkey.coolfs.service.common.exception.ServicesRuntimeExcepti
 import com.sfl.coolmonkey.coolfs.service.storage.StorageService;
 import com.sfl.coolmonkey.coolfs.service.storage.component.StorageServiceConversionComponent;
 import com.sfl.coolmonkey.coolfs.service.storage.dto.FileStoreDto;
-import com.sfl.coolmonkey.coolfs.service.storage.model.FileOrigin;
 import com.sfl.coolmonkey.coolfs.service.storage.model.FileStoreData;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,24 +87,6 @@ public class StorageServiceImpl implements StorageService {
         Assert.notNull(uuids);
         Assert.noNullElements(uuids.toArray());
         final List<GridFSDBFile> gridFSDBFiles = storageRepository.findByMetaUuidIn(uuids);
-        return buildFileStoreDataListFromGridFSDBFiles(gridFSDBFiles);
-    }
-
-    @Nonnull
-    @Override
-    public List<FileStoreData> getByCompanyUuidAndFileNameAndCreatedAfterAndOrigin(@Nonnull final String companyUuid,
-                                                                                   @Nonnull final String fileName,
-                                                                                   @Nonnull final Date createdAfter,
-                                                                                   @Nonnull final FileOrigin origin) {
-        Assert.notNull(companyUuid);
-        Assert.notNull(fileName);
-        Assert.notNull(createdAfter);
-        Assert.notNull(origin);
-        final List<GridFSDBFile> gridFSDBFiles = storageRepository.findByMetaCompanyUuidAndFilenameAndUploadDateGreaterThanAndMetaFileOrigin(
-                companyUuid,
-                fileName,
-                createdAfter,
-                origin.toString());
         return buildFileStoreDataListFromGridFSDBFiles(gridFSDBFiles);
     }
 

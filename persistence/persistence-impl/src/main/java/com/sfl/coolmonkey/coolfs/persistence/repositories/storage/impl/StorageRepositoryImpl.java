@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,8 +30,6 @@ public class StorageRepositoryImpl implements StorageRepository {
 
     //region Constants
     private static final String METADATA_UUID = "metadata.uuid";
-    private static final String METADATA_FILE_ORIGIN = "metadata.fileOrigin";
-    private static final String METADATA_COMPANY_UUID = "metadata.companyUuid";
     //endregion
 
     //region Dependencies
@@ -68,20 +65,6 @@ public class StorageRepositoryImpl implements StorageRepository {
     @Override
     public List<GridFSDBFile> findByMetaUuidIn(@Nonnull final List<String> uuids) {
         return gridFsTemplate.find(new Query(Criteria.where(METADATA_UUID).in(uuids)));
-    }
-
-    @Override
-    public List<GridFSDBFile> findByMetaCompanyUuidAndFilenameAndUploadDateGreaterThanAndMetaFileOrigin(@Nonnull final String companyUuid,
-                                                                                                        @Nonnull final String fileName,
-                                                                                                        @Nonnull final Date createdAfter,
-                                                                                                        @Nonnull final String fileOrigin) {
-        final Criteria criteria = Criteria.where(METADATA_COMPANY_UUID).is(companyUuid)
-                .andOperator(
-                        Criteria.where("filename").is(fileName),
-                        Criteria.where("uploadDate").gt(createdAfter),
-                        Criteria.where(METADATA_FILE_ORIGIN).is(fileOrigin)
-                );
-        return gridFsTemplate.find(new Query(criteria));
     }
 
     @Override

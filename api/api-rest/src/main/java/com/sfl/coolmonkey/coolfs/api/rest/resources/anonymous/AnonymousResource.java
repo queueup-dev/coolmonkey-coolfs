@@ -24,9 +24,6 @@ public class AnonymousResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnonymousResource.class);
 
-    //region Dependencies
-    //endregion
-
     //region Constructors
     public AnonymousResource() {
         LOGGER.debug("Initializing anonymous resource");

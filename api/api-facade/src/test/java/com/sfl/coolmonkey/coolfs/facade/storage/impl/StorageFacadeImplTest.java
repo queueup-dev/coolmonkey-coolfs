@@ -85,14 +85,14 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
         } catch (final IllegalArgumentException ex) {
             // Expected
         }
-        FileUploadModel invalidFileUploadModel = new FileUploadModel(null, "fileName", "text/txt", FileOriginModel.IMPORT_CSV);
+        FileUploadModel invalidFileUploadModel = new FileUploadModel(null, "fileName", "text/txt", FileOriginModel.CONTENT_PARTNER_LOGO);
         try {
             storageFacade.upload(new UploadFileRequest(invalidFileUploadModel));
             fail("Exception should be thrown");
         } catch (final IllegalArgumentException ex) {
             // Expected
         }
-        invalidFileUploadModel = new FileUploadModel(IOUtils.toInputStream("hi"), null, "text/txt", FileOriginModel.IMPORT_CSV);
+        invalidFileUploadModel = new FileUploadModel(IOUtils.toInputStream("hi"), null, "text/txt", FileOriginModel.CONTENT_PARTNER_LOGO);
         try {
             storageFacade.upload(new UploadFileRequest(invalidFileUploadModel));
             fail("Exception should be thrown");
