@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * User: Arthur Asatryan
@@ -48,10 +48,7 @@ public class StorageFacadeConversionComponentImpl implements StorageFacadeConver
                 model.getInputStream(),
                 model.getFileName(),
                 model.getContentType(),
-                new FileMetaDataDto(
-                        model.getUuid(),
-                        mapperFacade.map(model.getFileOrigin(), FileOrigin.class)
-                )
+                new FileMetaDataDto(model.getUuid(), mapperFacade.map(model.getFileOrigin(), FileOrigin.class))
         );
     }
 
@@ -59,16 +56,17 @@ public class StorageFacadeConversionComponentImpl implements StorageFacadeConver
     public StoredFileInfoModel buildStoredFileInfoModelFromFileStoreData(@Nonnull final FileStoreData fileStoreData) {
         Assert.notNull(fileStoreData);
         return new StoredFileInfoModel(
-                fileStoreData.getUuid(), fileStoreData.getFileName(), fileStoreData.getContentType(), fileStoreData.getCreated()
+                fileStoreData.getUuid(),
+                fileStoreData.getFileName(),
+                fileStoreData.getContentType(),
+                fileStoreData.getCreated()
         );
     }
 
     @Override
     public List<StoredFileInfoModel> buildStoredFileInfoModelsFromFileStoreDataList(@Nonnull final List<FileStoreData> fileStoreDataList) {
         Assert.notNull(fileStoreDataList);
-        final List<StoredFileInfoModel> filesInfo = new ArrayList<>();
-        fileStoreDataList.forEach(fileStoreData -> filesInfo.add(buildStoredFileInfoModelFromFileStoreData(fileStoreData)));
-        return filesInfo;
+        return fileStoreDataList.stream().map(this::buildStoredFileInfoModelFromFileStoreData).collect(Collectors.toList());
     }
     //endregion
 }
