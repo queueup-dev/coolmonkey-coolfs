@@ -100,8 +100,7 @@ public class StorageResource {
     @Path("load-by-uuid")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response loadFileByUuid(@BeanParam final LoadFileByUuidRequest request) {
-        final ResultResponseModel<LoadFileByUuidResponse> result = storageFacade.loadFileByUuid(request);
-        final FileLoadModel loadFileModel = result.getResponse().getLoadFileModel();
+        final FileLoadModel loadFileModel = storageFacade.loadFileByUuid(request).getResponse().getLoadFileModel();
         return Response.ok(loadFileModel.getInputStream(), loadFileModel.getContentType()).build();
     }
 
