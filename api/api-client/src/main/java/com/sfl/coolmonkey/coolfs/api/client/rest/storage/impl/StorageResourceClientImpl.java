@@ -142,7 +142,7 @@ public class StorageResourceClientImpl extends AbstractResourceClient implements
             try (FileOutputStream out = new FileOutputStream(tempFile)) {
                 IOUtils.copy(in, out);
             }
-        } catch (IOException ignore) {
+        } catch (final IOException ignore) {
             // Ignore
         }
         return tempFile;

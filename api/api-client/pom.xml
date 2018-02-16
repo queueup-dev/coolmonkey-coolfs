@@ -89,17 +89,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <distributionManagement>
-        <repository>
-            <id>coolmonkey-release</id>
-            <url>http://maven.sflpro.com/content/repositories/coolmonkey-release</url>
-        </repository>
-        <snapshotRepository>
-            <id>coolmonkey-snapshot</id>
-            <url>http://maven.sflpro.com/content/repositories/coolmonkey-snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <build>
         <plugins>
             <plugin>
