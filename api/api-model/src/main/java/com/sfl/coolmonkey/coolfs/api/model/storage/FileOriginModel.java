@@ -7,5 +7,6 @@ package com.sfl.coolmonkey.coolfs.api.model.storage;
  * Time: 2:25 PM
  */
 public enum FileOriginModel {
+    CLIENT_LOGO,
     CONTENT_PARTNER_LOGO
 }
