@@ -8,5 +8,6 @@ package com.sfl.coolmonkey.coolfs.api.model.storage;
  */
 public enum FileOriginModel {
     CLIENT_LOGO,
-    CONTENT_PARTNER_LOGO
+    CONTENT_PARTNER_LOGO,
+    CONTENT_PARTNER_CATEGORY_ICON
 }
