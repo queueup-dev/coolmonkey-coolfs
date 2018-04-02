@@ -81,7 +81,7 @@ public class StorageFacadeValidationComponentImplTest extends AbstractFacadeImpl
         // run test scenario
         final Map<CommonErrorType, Object> result = storageFacadeValidationComponent.validateFileMaxLength(fileStoreData, fileMaxLength);
         assertNotNull(result);
-        assertTrue(result.containsKey(CommonErrorType.IMPORT_FILE_MAX_SIZE_EXCEEDED));
+        assertTrue(result.containsKey(CommonErrorType.FILE_MAX_SIZE_EXCEEDED));
         // verify
         verifyAll();
     }

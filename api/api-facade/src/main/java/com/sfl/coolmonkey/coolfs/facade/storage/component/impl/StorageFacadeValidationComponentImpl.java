@@ -41,7 +41,7 @@ public class StorageFacadeValidationComponentImpl implements StorageFacadeValida
         Assert.notNull(fileStoreData, "The file store data should not be null");
         if (fileMaxLength != null && fileStoreData.getLength() > fileMaxLength) {
             final Map<CommonErrorType, Object> errors = new EnumMap<>(CommonErrorType.class);
-            errors.put(CommonErrorType.IMPORT_FILE_MAX_SIZE_EXCEEDED, null);
+            errors.put(CommonErrorType.FILE_MAX_SIZE_EXCEEDED, null);
             return errors;
         }
         return Collections.emptyMap();

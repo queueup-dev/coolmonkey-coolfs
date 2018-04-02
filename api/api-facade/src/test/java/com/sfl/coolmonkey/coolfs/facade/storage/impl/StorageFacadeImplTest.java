@@ -125,7 +125,7 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
                 new FileMetaDataDto()
         );
         final Map<CommonErrorType, Object> errors = new EnumMap<>(CommonErrorType.class);
-        errors.put(CommonErrorType.IMPORT_FILE_MAX_SIZE_EXCEEDED, null);
+        errors.put(CommonErrorType.FILE_MAX_SIZE_EXCEEDED, null);
         // Reset
         resetAll();
         // Expectations
@@ -142,7 +142,7 @@ public class StorageFacadeImplTest extends AbstractFacadeImplTest {
         verifyAll();
         assertNotNull(result);
         assertTrue(result.hasErrors());
-        getHelper().assertValidationErrors(result, Collections.singleton(CommonErrorType.IMPORT_FILE_MAX_SIZE_EXCEEDED));
+        getHelper().assertValidationErrors(result, Collections.singleton(CommonErrorType.FILE_MAX_SIZE_EXCEEDED));
     }
 
     @Test
