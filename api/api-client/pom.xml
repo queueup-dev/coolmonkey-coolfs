@@ -96,7 +96,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
         </plugins>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -107,8 +106,32 @@
                         <target>${target.jdk}</target>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <skip>false</skip>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.4.1</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>maven-release</id>
+            <url>https://nexus.ci.funtrips.io/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshot</id>
+            <url>https://nexus.ci.funtrips.io/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
