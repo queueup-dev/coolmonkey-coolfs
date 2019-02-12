@@ -3,3 +3,7 @@
 target/
 data/
 *.roo
+.vscode
+.project
+.settings
+.classpath

@@ -17,8 +17,7 @@
     <context:component-scan base-package="com.sfl.coolmonkey.coolfs.persistence.repositories.*"/>
 
     <mongo:mongo id="mongo"
-                 host="#{appProperties['database.mongo.host']}"
-                 port="#{appProperties['database.mongo.port']}">
+                 replica-set="#{appProperties['database.mongo.replicaset']}">
         <mongo:options connections-per-host="#{appProperties['database.mongo.connectionsperhost']}"
                        threads-allowed-to-block-for-connection-multiplier="#{appProperties['database.mongo.threadallowedtoblockforconnectionmultiplier']}"
                        connect-timeout="#{appProperties['database.mongo.connecttimeout']}"
